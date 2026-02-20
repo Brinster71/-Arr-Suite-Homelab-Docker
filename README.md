@@ -2,10 +2,22 @@
 
 This repository provides a **sanitized, public-safe template** for a full media automation stack using Docker Compose.
 
-- Compose file: `arr-fullstack.compose.yml`
-- Environment file: `arr-fullstack.env`
+- `arr-fullstack.compose.yml` → standard layout with only qBittorrent ports published on Gluetun.
+- `arr-fullstack.gluetun-full-ports.compose.yml` → expanded layout with many app ports published on Gluetun.
+- `arr-fullstack.env` → shared environment file with all placeholder values.
 
-All host paths are generic placeholders (`/path/to/...`) and all credentials/API keys are non-sensitive placeholders.
+## Why two Gluetun variants?
+
+When services use `network_mode: service:gluetun`, inbound access is controlled by Gluetun.
+
+- **Standard variant** (`arr-fullstack.compose.yml`)
+  - Keeps your current behavior: only qBittorrent WebUI + torrent ports are on Gluetun.
+  - Other services publish their own ports directly.
+
+- **Full-ports-on-Gluetun variant** (`arr-fullstack.gluetun-full-ports.compose.yml`)
+  - Publishes many service ports from the Gluetun container.
+  - Service containers are attached to Gluetun with `network_mode: service:gluetun`.
+  - Useful if you want most UI/network exposure to be controlled in one place.
 
 ## Included Services
 
@@ -18,49 +30,47 @@ All host paths are generic placeholders (`/path/to/...`) and all credentials/API
 - **Bazarr**: Subtitle management for Sonarr/Radarr libraries.
 
 ### Download Clients
-- **qBittorrent**: Torrent client, routed through Gluetun VPN in this template.
+- **qBittorrent**: Torrent client, routed through Gluetun VPN in both templates.
 - **SABnzbd**: Usenet downloader.
 
-### Media Access & Requests
-- **Jellyfin**: Media server for playback.
+### Request & Supporting Tools
 - **Overseerr**: User request front-end for media requests.
-
-### Supporting Tools
-- **Gluetun**: VPN container used by qBittorrent via `network_mode: service:gluetun`.
-- **Flaresolverr**: Bypass helper for Cloudflare-protected indexers (when needed).
-- **Recyclarr**: Syncs quality/release profiles (typically from TRaSH guides).
+- **Gluetun**: VPN container used by qBittorrent and optionally more services.
+- **Flaresolverr**: Helper for Cloudflare-protected indexers.
+- **Recyclarr**: Syncs quality/release profiles (commonly from TRaSH).
 - **Unpackerr**: Unpacks completed downloads and notifies Arr applications.
+
+## Environment File (`arr-fullstack.env`)
+
+The env file includes centralized **path markers**:
+
+- `APPDATA_ROOT=/path/to/appdata`
+- `DOWNLOADS_ROOT=/path/to/downloads`
+- `INCOMPLETE_DOWNLOADS_ROOT=/path/to/incomplete-downloads`
+- `TV_ROOT=/path/to/tv`
+- `MOVIES_ROOT=/path/to/movies`
+- `MUSIC_ROOT=/path/to/music`
+- `BOOKS_ROOT=/path/to/books`
+
+It also includes placeholder values for:
+- VPN credentials/provider
+- Arr service URLs for Unpackerr
+- Arr API keys
+- Published host ports
 
 ## How to Use
 
-1. Copy/edit `arr-fullstack.env` and replace placeholders:
-   - VPN provider credentials
-   - API key placeholders
-   - UID/GID and timezone
-2. Replace all `/path/to/...` mount paths in `arr-fullstack.compose.yml` with your real host paths.
-3. Start the stack:
-
-```bash
-docker compose --env-file arr-fullstack.env -f arr-fullstack.compose.yml up -d
-```
-
-4. Open each app in a browser (using your Docker host IP):
-   - Prowlarr: `http://<host>:9696`
-   - Sonarr: `http://<host>:8989`
-   - Radarr: `http://<host>:7878`
-   - Lidarr: `http://<host>:8686`
-   - Readarr: `http://<host>:8787`
-   - Bazarr: `http://<host>:6767`
-   - qBittorrent: `http://<host>:8080`
-   - SABnzbd: `http://<host>:8085`
-   - Jellyfin: `http://<host>:8096`
-   - Overseerr: `http://<host>:5055`
-
-## Notes on Paths
-
-To avoid import/move issues in Arr apps:
-- Keep a **single shared downloads root** mounted consistently (e.g., `/downloads`) across downloaders and Arr apps.
-- Keep media roots (`/movies`, `/tv`, `/music`, `/books`) consistent with the paths you configure inside each app.
+1. Edit `arr-fullstack.env` and replace every placeholder with your own values.
+2. Choose your compose variant:
+   - Standard (only qBittorrent ports on Gluetun):
+     ```bash
+     docker compose --env-file arr-fullstack.env -f arr-fullstack.compose.yml up -d
+     ```
+   - Full-ports on Gluetun:
+     ```bash
+     docker compose --env-file arr-fullstack.env -f arr-fullstack.gluetun-full-ports.compose.yml up -d
+     ```
+3. Access applications on the host ports you define in `arr-fullstack.env`.
 
 ## Security & Public Sharing
 
