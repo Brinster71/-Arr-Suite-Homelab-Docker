@@ -1,6 +1,6 @@
 # Arr Fullstack Docker Compose Template
 
-This repository provides a **sanitized, public-safe template** for a full media automation stack using Docker Compose.
+This repository provides a template for a full media automation stack using Docker Compose.
 
 - `arr-fullstack.compose.yml` → standard layout with only qBittorrent ports published on Gluetun.
 - `arr-fullstack.gluetun-full-ports.compose.yml` → expanded layout with many app ports published on Gluetun.
