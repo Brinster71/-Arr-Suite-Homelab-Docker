@@ -31,7 +31,6 @@ When services use `network_mode: service:gluetun`, inbound access is controlled 
 
 ### Download Clients
 - **qBittorrent**: Torrent client, routed through Gluetun VPN in both templates.
-- **SABnzbd**: Usenet downloader.
 
 ### Request & Supporting Tools
 - **Overseerr**: User request front-end for media requests.
