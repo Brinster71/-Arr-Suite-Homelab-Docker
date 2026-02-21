@@ -40,6 +40,7 @@ services:
   sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:latest
     container_name: sabnzbd
+    network_mode: "bridge"
     ports:
       - "${SABNZBD_PORT}:8080"
     environment:
@@ -55,6 +56,7 @@ services:
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
+    network_mode: "bridge"
     ports:
       - "${PROWLARR_PORT}:9696"
     environment:
@@ -68,6 +70,7 @@ services:
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
+    network_mode: "bridge"
     ports:
       - "${SONARR_PORT}:8989"
     environment:
@@ -83,6 +86,7 @@ services:
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
+    network_mode: "bridge"
     ports:
       - "${RADARR_PORT}:7878"
     environment:
@@ -98,6 +102,7 @@ services:
   lidarr:
     image: lscr.io/linuxserver/lidarr:latest
     container_name: lidarr
+    network_mode: "bridge"
     ports:
       - "${LIDARR_PORT}:8686"
     environment:
@@ -113,6 +118,7 @@ services:
   readarr:
     image: lscr.io/linuxserver/readarr:develop
     container_name: readarr
+    network_mode: "bridge"
     ports:
       - "${READARR_PORT}:8787"
     environment:
@@ -128,6 +134,7 @@ services:
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
+    network_mode: "bridge"
     ports:
       - "${BAZARR_PORT}:6767"
     environment:
@@ -143,6 +150,7 @@ services:
   overseerr:
     image: lscr.io/linuxserver/overseerr:latest
     container_name: overseerr
+    network_mode: "bridge"
     ports:
       - "${OVERSEERR_PORT}:5055"
     environment:
@@ -156,6 +164,7 @@ services:
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
+    network_mode: "bridge"
     ports:
       - "${FLARESOLVERR_PORT}:8191"
     environment:
