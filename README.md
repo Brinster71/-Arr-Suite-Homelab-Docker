@@ -80,3 +80,24 @@ This template intentionally contains no personal data:
 - No real domain names or IP addresses
 
 If you fork/share this repo, keep using placeholders and never commit live secrets.
+
+## Optional: Cron fix for Gluetun `/etc/resolv.conf`
+
+If your `gluetun` container occasionally ends up with only:
+
+```text
+nameserver   127.0.0.1
+```
+
+you can use `scripts/check-gluetun-resolv.sh` to append:
+
+- `nameserver   192.168.1.192`
+- `nameserver   1.1.1.1`
+
+The script only updates the file when **127.0.0.1 is the only nameserver entry**.
+
+Example crontab entry (runs every 5 minutes):
+
+```cron
+*/5 * * * * /bin/bash /workspace/-Arr-Suite-Homelab-Docker/scripts/check-gluetun-resolv.sh >> /var/log/gluetun-resolv-cron.log 2>&1
+```
