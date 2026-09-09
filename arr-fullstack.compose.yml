@@ -208,7 +208,22 @@ services:
     volumes:
       - ${DOWNLOADS_ROOT}:/downloads
     restart: unless-stopped
-
+  comicarr:
+    image: ghcr.io/frankieramirez/comicarr:latest
+    container_name: comicarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA_ROOT}/comicarr/config:/config
+      - ${COMICS_ROOT}:/comics
+      - ${MANGA_ROOT}:/manga
+      - ${DOWNLOADS_ROOT}:/downloads
+    ports:
+      - 8090:8090
+    restart: unless-stopped
+    stop_grace_period: 30s
 networks:
   default:
     name: arr-fullstack
